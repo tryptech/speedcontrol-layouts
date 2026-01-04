@@ -9,7 +9,7 @@ module.exports = (nodecg) => {
 	const runDataActiveRun = nodecg.Replicant('runDataActiveRun', 'nodecg-speedcontrol');
 
 	runDataActiveRun.on('change', (newVal, oldVal) => {
-		if (oldVal) {
+		if (newVal) {
 			let index = runDataArray.value.findIndex(x => x.id === newVal.id);
 			data.value.runs = JSON.parse(JSON.stringify(runDataArray.value.slice(index + 1, index + 6)))
 			if (newVal.customData && newVal.customData.host) data.value.host = newVal.customData.host;	
@@ -45,7 +45,7 @@ module.exports = (nodecg) => {
 	}
 
 	async function useOengus() {
-		let res = await fetch(`https://${(nodecg.bundleConfig.oengus.useSandbox) ? 'sandbox' : ''}oengus.io/api/marathons/${nodecg.bundleConfig.oengus.marathonShort}`, {
+		let res = await fetch(`https://${(nodecg.bundleConfig.oengus.useSandbox) ? 'sandbox' : ''}oengus.io/api/v1/marathons/${nodecg.bundleConfig.oengus.marathonShort}`, {
 			method: 'GET',
 			dataType: 'json',
 		});
@@ -161,8 +161,18 @@ module.exports = (nodecg) => {
 
 	async function getOengusData() {
 
+		let authRes = await fetch(`https://oengus.io/api/v2/auth/login`, {
+			method: 'POST',
+			dataType: 'json',
+			body: JSON.stringify({
+				username: nodecg.bundleConfig.oengus.username,
+				password: nodecg.bundleConfig.oengus.password,
+			}),
+		});
+		let authData = await authRes.json();
+
 		// Get general details.
-		let detailRes = await fetch(`https://oengus.io/api/marathons/${nodecg.bundleConfig.oengus.marathonShort}`, {
+		let detailRes = await fetch(`https://oengus.io/api/v2/marathons/${nodecg.bundleConfig.oengus.marathonShort}`, {
 			method: 'GET',
 			dataType: 'json',
 		});

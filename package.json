@@ -6,7 +6,7 @@
   "author": "nicnacnic",
   "license": "MIT",
   "nodecg": {
-    "compatibleRange": "^1.6.0",
+    "compatibleRange": "^1.6.0 || ^2.0.0",
     "bundleDependencies": {
       "nodecg-speedcontrol": "^2.2.0"
     },
